@@ -1,47 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <title>Lab 5 - Party Horn</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-  <title>Lab 5 - Party Horn</title>
+    <!-- JS Confetti -->
+    <script src="./assets/scripts/js-confetti.browser.js"></script>
 
-  <!-- JS Confetti -->
-  <script src="./assets/scripts/js-confetti.browser.js"></script>
+    <!-- Main Stylesheet & Scripts -->
+    <link rel="stylesheet" href="assets/styles/global.css" />
+    <script src="./assets/scripts/expose.js" type="module"></script>
+  </head>
 
-  <!-- Main Stylesheet & Scripts -->
-  <link rel="stylesheet" href="assets/styles/global.css" />
-  <script src="./assets/scripts/expose.js" type="module"></script>
-</head>
+  <body>
+    <header>
+      <nav>
+        <a href="explore.html" title="Go to explore page">Pt 2. Explore</a>
+      </nav>
+    </header>
+    <main>
+      <section id="expose">
+        <header>
+          <h2>Expose - Party Horn</h2>
+        </header>
+        <img id="sound-image" src="assets/images/no-image.png" alt="No image selected" />
+        <select name="horn" id="horn-select" onchange="updateSound()">
+          <option value="select" disabled selected>Select Horn:</option>
+          <option value="air-horn">Air Horn</option>
+          <option value="car-horn">Car Horn</option>
+          <option value="party-horn">Party Horn</option>
+        </select>
+        <div id="volume-controls">
+          <input type="range" name="volume" id="volume" value="50" min="0" max="100" step="1" onchange="updateVolume()" />
+          <img id="volume-image" src="assets/icons/volume-level-2.svg" alt="Volume level 2" />
+        </div>
+        <button id="play-button" onclick="playSound()">Play Sound</button>
+        <audio id="horn-sound" src=""></audio>
+      </section>
+    </main>
 
-<body>
-  <header>
-    <nav>
-      <a href="explore.html" title="Go to explore page">Pt 2. Explore</a>
-    </nav>
-  </header>
-  <main>
-    <section id="expose">
-      <header>
-        <h2>Expose - Party Horn</h2>
-      </header>
-      <img src="assets/images/no-image.png" alt="No image selected" />
-      <select name="horn" id="horn-select">
-        <option value="select" disabled selected>Select Horn:</option>
-        <option value="air-horn">Air Horn</option>
-        <option value="car-horn">Car Horn</option>
-        <option value="party-horn">Party Horn</option>
-      </select>
-      <div id="volume-controls">
-        <input type="range" name="volume" id="volume" value="50" min="0" max="100" step="1" />
-        <img src="assets/icons/volume-level-2.svg" alt="Volume level 2" />
-      </div>
-      <button>Play Sound</button>
-      <audio class="hidden" src=""></audio>
-    </section>
-  </main>
+    <script>
+      // Initialize variables for image and audio sources
+      let soundImageSrc = "assets/images/no-image.png";
+      let soundFileSrc = "";
+      
+      // Update the image and audio sources based on the selected horn
+      function updateSound() {
+        const hornSelect = document.getElementById("horn-select");
+        const soundImage = document.getElementById("sound-image");
+        const hornSound = document.getElementById("horn-sound");
+        
+        // Update the image and audio sources based on the selected horn
+        if (hornSelect.value === "air-horn") {
+          soundImageSrc = "assets/images/air-horn.svg";
+          soundFileSrc = "assets/audio/air-horn.mp3";
+        } else if (hornSelect.value === "car-horn") {
+          soundImageSrc = "assets/images/car-horn.svg";
+          soundFileSrc = "assets/audio/car-horn.mp3";
+        } else if (hornSelect.value === "party-horn") {
+          soundImageSrc = "assets/images/party-horn.svg";
+          soundFileSrc = "assets/audio/party-horn.mp3";
+        } else {
+          soundImageSrc = "assets/images/no-image.png";
+          soundFileSrc = "";
+        }
+        
+        soundImage.src = soundImageSrc;
+        hornSound.src = soundFileSrc;
+      }
+      
+      // Update the volume icon and audio volume based on the volume range input
+      function updateVolume() {
+        const volumeValue = document.getElementById("volume").value;
+        const volumeImage = document.getElementById("volume-image");
+        const hornSound = document.getElementById("horn-sound");
+            // Update the volume icon and audio volume based on the volume range input
+    if (volumeValue == 0) {
+      volumeImage.src = "assets/icons/volume-level-0.svg";
+      hornSound.volume = 0;
+    } else if (volumeValue <= 33) {
+      volumeImage.src = "assets/icons/volume-level-1.svg";
+      hornSound.volume = volumeValue / 100;
+    } else if (volumeValue <= 66) {
+      volumeImage.src = "assets/icons/volume-level-2.svg";
+      hornSound.volume = volumeValue / 100;
+    } else {
+      volumeImage.src = "assets/icons/volume-level-3.svg";
+      hornSound.volume = volumeValue / 100;
+    }
+  }
+  
+  // Play the selected horn sound
+  function playSound() {
+    const hornSound = document.getElementById("horn-sound");
+    hornSound.currentTime = 0;
+    hornSound.play();
+    
+    // Trigger confetti using JSConfetti library
+    confetti({
+      particleCount: 100,
+      startVelocity: 30,
+      spread: 360,
+      gravity: 1,
+      colors: ["#ff0000", "#00ff00", "#0000ff"]
+    });
+  }
+</script>
 </body>
-
 </html>
