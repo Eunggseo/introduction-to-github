@@ -1,1 +1,6 @@
-# Lab 5 - Starter
+# Lab 5 
+## Catherine Du
+## Wenyu Zhong
+
+# Expose
+https://eunggseo.github.io/Lab5_Starter/expose.html
