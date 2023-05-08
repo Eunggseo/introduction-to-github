@@ -41,7 +41,7 @@ function init() {
     // Update the volume icon and audio volume based on the volume range input
     if (volume.value >= 67) {
       volumeImage.src = "assets/icons/volume-level-3.svg";
-    } else if (volume.value >= 34) {
+    } else if (volume.value >= 33) {
       volumeImage.src = "assets/icons/volume-level-2.svg";
     } else if (volume.value >= 1) {
       volumeImage.src = "assets/icons/volume-level-1.svg";
@@ -52,27 +52,28 @@ function init() {
     hornSound.volume = volume.value / 100;
   }
 
-  // Play the sound when the "Play Sound" button is clicked
-  function playSound(event) {
-    event.preventDefault();
-    hornSound.play();
+  // Play the selected sound
+  function playSound() {
+    const hornSelect = document.getElementById("horn-select");
+    const audio = document.querySelector('audio');
 
-    // Add confetti when the party horn is selected and the volume is greater than 0
-    if (document.getElementById("horn-select").value === "party-horn" && volume.value > 0) {
-      confetti({
-        particleCount: 100,
-        startVelocity: 30,
-        spread: 360,
-        origin: {
-          x: Math.random(),
-          y: Math.random() - 0.2
-        }
+    if (hornSelect.value === 'party-horn') {
+      const jsConfetti = new JSConfetti();
+      jsConfetti.addConfetti({
+        confettiRadius: 5,
       });
     }
+    audio.play();
   }
 
-  // Attach event listeners to the volume and horn select elements
-  volume.addEventListener("input", updateVolume);
-  document.getElementById("horn-select").addEventListener("change", updateSound);
-  document.querySelector("button").addEventListener("click", playSound);
+  const hornSelect = document.getElementById("horn-select");
+  const volumeInput = document.getElementById("volume");
+
+  // Attach event listeners to update sound and volume controls
+  hornSelect.addEventListener("change", updateSound);
+  volumeInput.addEventListener("input", updateVolume);
+
+  // Attach event listener to play the sound
+  const soundButton = document.querySelector("button");
+  soundButton.addEventListener("click", playSound);
 }
