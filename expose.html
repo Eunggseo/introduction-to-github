@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  
+
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -14,22 +14,6 @@
   <!-- Main Stylesheet & Scripts -->
   <link rel="stylesheet" href="assets/styles/global.css" />
   <script src="./assets/scripts/expose.js" type="module"></script>
-
-  <script>
-    const playButton = document.querySelector('button');
-    playButton.addEventListener('click', () => {
-      // Trigger confetti animation
-      confetti({
-        particleCount: 100,
-        startVelocity: 30,
-        spread: 360,
-        origin: {
-          x: Math.random(),
-          y: Math.random() - 0.2
-        }
-      });
-    });
-  </script>
 </head>
 
 <body>
