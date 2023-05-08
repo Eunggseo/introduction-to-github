@@ -3,58 +3,49 @@
 window.addEventListener('DOMContentLoaded', init);
 
 function init() {
-  const synth = window.speechSynthesis;
-  const voiceSelect = document.getElementById('voice-select');
-  const textToSpeak = document.getElementById('text-to-speak');
+  const voiceSelect = document.querySelector('#voice-select');
+  const textToSpeak = document.querySelector('#text-to-speak');
   const speakButton = document.querySelector('button');
   const faceImage = document.querySelector('img');
-  const openFaceSrc = 'assets/images/smiling-open.png';
-  const closedFaceSrc = 'assets/images/smiling.png';
-  let speaking = false;
 
-  // Populate voice options dropdown
-  function populateVoiceList() {
-    const voices = synth.getVoices();
-    for (let i = 0; i < voices.length; i++) {
+  const synth = window.speechSynthesis;
+
+  // Load available voices and populate dropdown
+  function loadVoices() {
+    voices = synth.getVoices();
+    voices.forEach(voice => {
       const option = document.createElement('option');
-      option.textContent = `${voices[i].name} (${voices[i].lang})`;
-      option.setAttribute('data-lang', voices[i].lang);
-      option.setAttribute('data-name', voices[i].name);
+      option.textContent = `${voice.name} (${voice.lang})`;
+      option.setAttribute('data-lang', voice.lang);
+      option.setAttribute('data-name', voice.name);
       voiceSelect.appendChild(option);
-    }
+    });
   }
-
-  populateVoiceList();
+  loadVoices();
+  
+  if (synth.onvoiceschanged !== undefined) {
+    synth.onvoiceschanged = loadVoices;
+  }
 
   // Speak the text with the selected voice
   function speakText() {
     const selectedVoice = voiceSelect.selectedOptions[0].getAttribute('data-name');
     const utterance = new SpeechSynthesisUtterance(textToSpeak.value);
-    const voices = synth.getVoices();
-    for (let i = 0; i < voices.length; i++) {
-      if (voices[i].name === selectedVoice) {
-        utterance.voice = voices[i];
-        break;
-      }
-    }
 
-    utterance.addEventListener('start', () => {
-      speaking = true;
-      faceImage.src = openFaceSrc;
+    voices.forEach(voice => {
+      if (voice.name === selectedVoice) {
+        utterance.voice = voice;
+      }
     });
 
     utterance.addEventListener('end', () => {
-      speaking = false;
-      faceImage.src = closedFaceSrc;
+      faceImage.src = 'assets/images/smiling.png'; // Set face to smiling after speaking ends
     });
 
     synth.speak(utterance);
+
+    faceImage.src = 'assets/images/smiling-open.png'; // Set face to open-mouthed while synthesizer is speaking
   }
 
-  // Bind click event to speak button
-  speakButton.addEventListener('click', () => {
-    if (!speaking) {
-      speakText();
-    }
-  });
+  speakButton.addEventListener('click', speakText);
 }
