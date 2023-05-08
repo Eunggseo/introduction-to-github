@@ -1,5 +1,5 @@
 # Lab 5 
-**Catherine Du**
+**Catherine Du**\
 **Wenyu Zhong**
 
 # Expose
